@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {Observable} from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 
 /**
  * 1、创建一个 Observable（可观察对象）
@@ -16,7 +16,11 @@ let fruitesObservable = Observable.create(observer => {
   // next 方法用来将数据一个一个的传递给 Observer
   observer.next('苹果')
   observer.next('香蕉')
+  observer.error(new Error('some error'))
   observer.next('橘子')
+
+  // error 和 complete 只会执行其中一个，会中断执行（即：不会再继续传递数据了）
+
   // error 方法会告知 Observer 发生了错误
   // observer.error()
 
@@ -27,8 +31,12 @@ let fruitesObservable = Observable.create(observer => {
 // 创建一个观察者
 let fruitesObserver = {
   next: data => console.log(data),
+  error: error => console.log(error.message),
   complete: () => console.log('完成!')
 }
 
 // 订阅
 fruitesObservable.subscribe(fruitesObserver)
+
+let searchTerms = new Subject()
+searchTerms.pipe
